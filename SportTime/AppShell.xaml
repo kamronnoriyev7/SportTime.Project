@@ -3,13 +3,13 @@
     x:Class="SportTime.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:SportTime"
+    xmlns:views="clr-namespace:SportTime.Views"
     Shell.FlyoutBehavior="Disabled"
-    Title="SportTime">
+    Title="ToDo List">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
+        Title="📝 Vazifalar"
+        ContentTemplate="{DataTemplate views:MainPage}"
         Route="MainPage" />
 
 </Shell>
