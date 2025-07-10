@@ -1,0 +1,8 @@
+﻿<Shell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:SportTime.Pages"
+    x:Class="SportTime.AppShell">
+
+    <ShellContent Title="Home" ContentTemplate="{DataTemplate pages:HomePage}" />
+</Shell>
