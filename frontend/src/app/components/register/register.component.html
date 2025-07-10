@@ -1,0 +1,106 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>SportTime</h1>
+      <p>Ro'yxatdan o'tish</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">Ism</label>
+          <input
+            type="text"
+            id="firstName"
+            formControlName="firstName"
+            class="form-control"
+            [class.error]="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched"
+          />
+          <div class="error-message" *ngIf="registerForm.get('firstName')?.invalid && registerForm.get('firstName')?.touched">
+            <span *ngIf="registerForm.get('firstName')?.errors?.['required']">Ism majburiy</span>
+            <span *ngIf="registerForm.get('firstName')?.errors?.['minlength']">Ism kamida 2 ta belgidan iborat bo'lishi kerak</span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lastName">Familiya</label>
+          <input
+            type="text"
+            id="lastName"
+            formControlName="lastName"
+            class="form-control"
+            [class.error]="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched"
+          />
+          <div class="error-message" *ngIf="registerForm.get('lastName')?.invalid && registerForm.get('lastName')?.touched">
+            <span *ngIf="registerForm.get('lastName')?.errors?.['required']">Familiya majburiy</span>
+            <span *ngIf="registerForm.get('lastName')?.errors?.['minlength']">Familiya kamida 2 ta belgidan iborat bo'lishi kerak</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="registerForm.get('email')?.invalid && registerForm.get('email')?.touched"
+        />
+        <div class="error-message" *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">Email majburiy</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">Email formati noto'g'ri</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Parol</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [class.error]="registerForm.get('password')?.invalid && registerForm.get('password')?.touched"
+        />
+        <div class="error-message" *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">Parol majburiy</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Parol kamida 6 ta belgidan iborat bo'lishi kerak</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Parolni tasdiqlang</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [class.error]="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched"
+        />
+        <div class="error-message" *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Parol tasdiqlanishi majburiy</span>
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['passwordMismatch']">Parollar mos kelmaydi</span>
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="registerForm.invalid || loading"
+      >
+        <span *ngIf="loading" class="spinner"></span>
+        {{ loading ? 'Kuting...' : 'Ro\'yxatdan o\'tish' }}
+      </button>
+    </form>
+
+    <div class="register-footer">
+      <p>Hisobingiz bormi? 
+        <a href="#" (click)="navigateToLogin()">Tizimga kiring</a>
+      </p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,191 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="header-left">
+        <h1>SportTime</h1>
+        <p *ngIf="currentUser">Xush kelibsiz, {{ currentUser.firstName }}!</p>
+      </div>
+      <div class="header-right">
+        <button class="btn btn-outline" (click)="logout()">Chiqish</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Stats Cards -->
+  <div class="stats-section" *ngIf="stats">
+    <div class="stats-grid">
+      <div class="stat-card total">
+        <div class="stat-icon">📊</div>
+        <div class="stat-content">
+          <h3>{{ stats.totalTasks }}</h3>
+          <p>Jami vazifalar</p>
+        </div>
+      </div>
+      
+      <div class="stat-card completed">
+        <div class="stat-icon">✅</div>
+        <div class="stat-content">
+          <h3>{{ stats.completedTasks }}</h3>
+          <p>Bajarilgan</p>
+        </div>
+      </div>
+      
+      <div class="stat-card pending">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-content">
+          <h3>{{ stats.pendingTasks }}</h3>
+          <p>Kutilayotgan</p>
+        </div>
+      </div>
+      
+      <div class="stat-card overdue">
+        <div class="stat-icon">⚠️</div>
+        <div class="stat-content">
+          <h3>{{ stats.overdueTasks }}</h3>
+          <p>Muddati o'tgan</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="filters-section">
+    <div class="filters-grid">
+      <div class="filter-group">
+        <input
+          type="text"
+          placeholder="Vazifalarni qidirish..."
+          [(ngModel)]="searchTerm"
+          (input)="onSearchChange()"
+          class="search-input"
+        />
+      </div>
+      
+      <div class="filter-group">
+        <select [(ngModel)]="selectedCategory" (change)="onCategoryChange()" class="filter-select">
+          <option [ngValue]="null">Barcha kategoriyalar</option>
+          <option [ngValue]="TaskCategory.General">{{ TaskCategoryLabels[TaskCategory.General] }}</option>
+          <option [ngValue]="TaskCategory.Work">{{ TaskCategoryLabels[TaskCategory.Work] }}</option>
+          <option [ngValue]="TaskCategory.Personal">{{ TaskCategoryLabels[TaskCategory.Personal] }}</option>
+          <option [ngValue]="TaskCategory.Health">{{ TaskCategoryLabels[TaskCategory.Health] }}</option>
+          <option [ngValue]="TaskCategory.Education">{{ TaskCategoryLabels[TaskCategory.Education] }}</option>
+          <option [ngValue]="TaskCategory.Shopping">{{ TaskCategoryLabels[TaskCategory.Shopping] }}</option>
+          <option [ngValue]="TaskCategory.Travel">{{ TaskCategoryLabels[TaskCategory.Travel] }}</option>
+          <option [ngValue]="TaskCategory.Sport">{{ TaskCategoryLabels[TaskCategory.Sport] }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <select [(ngModel)]="selectedPriority" (change)="onPriorityChange()" class="filter-select">
+          <option [ngValue]="null">Barcha muhimlik darajalari</option>
+          <option [ngValue]="TaskPriority.Low">{{ TaskPriorityLabels[TaskPriority.Low] }}</option>
+          <option [ngValue]="TaskPriority.Medium">{{ TaskPriorityLabels[TaskPriority.Medium] }}</option>
+          <option [ngValue]="TaskPriority.High">{{ TaskPriorityLabels[TaskPriority.High] }}</option>
+          <option [ngValue]="TaskPriority.Critical">{{ TaskPriorityLabels[TaskPriority.Critical] }}</option>
+        </select>
+      </div>
+      
+      <div class="filter-group">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            [(ngModel)]="showCompleted"
+            (change)="onCompletedFilterChange()"
+          />
+          Faqat bajarilganlar
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tasks List -->
+  <div class="tasks-section">
+    <div class="section-header">
+      <h2>Vazifalar ({{ filteredTasks.length }})</h2>
+      <button class="btn btn-primary" routerLink="/task/new">
+        ➕ Yangi vazifa
+      </button>
+    </div>
+
+    <div class="tasks-grid" *ngIf="!loading && filteredTasks.length > 0">
+      <div
+        *ngFor="let task of filteredTasks"
+        class="task-card"
+        [class.completed]="task.isCompleted"
+        [class.overdue]="isOverdue(task)"
+      >
+        <div class="task-header">
+          <div class="task-checkbox">
+            <input
+              type="checkbox"
+              [checked]="task.isCompleted"
+              (change)="toggleTaskCompletion(task)"
+            />
+          </div>
+          <div class="task-priority">
+            <span class="priority-badge" [class]="getPriorityClass(task.priority)">
+              {{ TaskPriorityLabels[task.priority] }}
+            </span>
+          </div>
+        </div>
+
+        <div class="task-content">
+          <h3 class="task-title" [class.completed]="task.isCompleted">
+            {{ task.title }}
+          </h3>
+          <p class="task-description" *ngIf="task.description">
+            {{ task.description }}
+          </p>
+          
+          <div class="task-meta">
+            <span class="task-category">
+              {{ getCategoryIcon(task.category) }} {{ TaskCategoryLabels[task.category] }}
+            </span>
+            <span class="task-date" *ngIf="task.dueDate">
+              📅 {{ task.dueDate | date:'dd.MM.yyyy' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="task-actions">
+          <button
+            class="btn-icon edit"
+            [routerLink]="['/task/edit', task.id]"
+            title="Tahrirlash"
+          >
+            ✏️
+          </button>
+          <button
+            class="btn-icon delete"
+            (click)="deleteTask(task)"
+            title="O'chirish"
+          >
+            🗑️
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Vazifalar yuklanmoqda...</p>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="!loading && filteredTasks.length === 0">
+      <div class="empty-icon">📋</div>
+      <h3>Vazifalar topilmadi</h3>
+      <p *ngIf="searchTerm || selectedCategory !== null || selectedPriority !== null || showCompleted">
+        Filtrlarni o'zgartirib ko'ring yoki yangi vazifa qo'shing.
+      </p>
+      <p *ngIf="!searchTerm && selectedCategory === null && selectedPriority === null && !showCompleted">
+        Hozircha vazifalar yo'q. Birinchi vazifangizni qo'shing!
+      </p>
+      <button class="btn btn-primary" routerLink="/task/new">
+        ➕ Yangi vazifa qo'shish
+      </button>
+    </div>
+  </div>
+</div>

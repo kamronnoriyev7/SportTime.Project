@@ -1,0 +1,59 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>SportTime</h1>
+      <p>Tizimga kirish</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          [class.error]="loginForm.get('email')?.invalid && loginForm.get('email')?.touched"
+        />
+        <div class="error-message" *ngIf="loginForm.get('email')?.invalid && loginForm.get('email')?.touched">
+          <span *ngIf="loginForm.get('email')?.errors?.['required']">Email majburiy</span>
+          <span *ngIf="loginForm.get('email')?.errors?.['email']">Email formati noto'g'ri</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Parol</label>
+        <input
+          type="password"
+          id="password"
+          formControlName="password"
+          class="form-control"
+          [class.error]="loginForm.get('password')?.invalid && loginForm.get('password')?.touched"
+        />
+        <div class="error-message" *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          <span *ngIf="loginForm.get('password')?.errors?.['required']">Parol majburiy</span>
+          <span *ngIf="loginForm.get('password')?.errors?.['minlength']">Parol kamida 6 ta belgidan iborat bo'lishi kerak</span>
+        </div>
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="loginForm.invalid || loading"
+      >
+        <span *ngIf="loading" class="spinner"></span>
+        {{ loading ? 'Kuting...' : 'Kirish' }}
+      </button>
+    </form>
+
+    <div class="login-footer">
+      <p>Hisobingiz yo'qmi? 
+        <a href="#" (click)="navigateToRegister()">Ro'yxatdan o'ting</a>
+      </p>
+    </div>
+  </div>
+</div>

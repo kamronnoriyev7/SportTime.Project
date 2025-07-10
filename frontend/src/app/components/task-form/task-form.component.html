@@ -1,0 +1,126 @@
+<div class="task-form-container">
+  <div class="task-form-card">
+    <div class="form-header">
+      <h1>{{ pageTitle }}</h1>
+      <button class="btn-close" (click)="onCancel()">✕</button>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="task-form" *ngIf="!loading">
+      <div class="form-group">
+        <label for="title">Vazifa nomi *</label>
+        <input
+          type="text"
+          id="title"
+          formControlName="title"
+          class="form-control"
+          placeholder="Vazifa nomini kiriting..."
+          [class.error]="taskForm.get('title')?.invalid && taskForm.get('title')?.touched"
+        />
+        <div class="error-message" *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched">
+          <span *ngIf="taskForm.get('title')?.errors?.['required']">Vazifa nomi majburiy</span>
+          <span *ngIf="taskForm.get('title')?.errors?.['maxlength']">Vazifa nomi 200 belgidan oshmasligi kerak</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Tavsif</label>
+        <textarea
+          id="description"
+          formControlName="description"
+          class="form-control"
+          placeholder="Vazifa haqida batafsil ma'lumot..."
+          rows="4"
+          [class.error]="taskForm.get('description')?.invalid && taskForm.get('description')?.touched"
+        ></textarea>
+        <div class="error-message" *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched">
+          <span *ngIf="taskForm.get('description')?.errors?.['maxlength']">Tavsif 1000 belgidan oshmasligi kerak</span>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="category">Kategoriya *</label>
+          <select
+            id="category"
+            formControlName="category"
+            class="form-control"
+            [class.error]="taskForm.get('category')?.invalid && taskForm.get('category')?.touched"
+          >
+            <option [value]="TaskCategory.General">{{ TaskCategoryLabels[TaskCategory.General] }}</option>
+            <option [value]="TaskCategory.Work">{{ TaskCategoryLabels[TaskCategory.Work] }}</option>
+            <option [value]="TaskCategory.Personal">{{ TaskCategoryLabels[TaskCategory.Personal] }}</option>
+            <option [value]="TaskCategory.Health">{{ TaskCategoryLabels[TaskCategory.Health] }}</option>
+            <option [value]="TaskCategory.Education">{{ TaskCategoryLabels[TaskCategory.Education] }}</option>
+            <option [value]="TaskCategory.Shopping">{{ TaskCategoryLabels[TaskCategory.Shopping] }}</option>
+            <option [value]="TaskCategory.Travel">{{ TaskCategoryLabels[TaskCategory.Travel] }}</option>
+            <option [value]="TaskCategory.Sport">{{ TaskCategoryLabels[TaskCategory.Sport] }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="priority">Muhimlik darajasi *</label>
+          <select
+            id="priority"
+            formControlName="priority"
+            class="form-control"
+            [class.error]="taskForm.get('priority')?.invalid && taskForm.get('priority')?.touched"
+          >
+            <option [value]="TaskPriority.Low">{{ TaskPriorityLabels[TaskPriority.Low] }}</option>
+            <option [value]="TaskPriority.Medium">{{ TaskPriorityLabels[TaskPriority.Medium] }}</option>
+            <option [value]="TaskPriority.High">{{ TaskPriorityLabels[TaskPriority.High] }}</option>
+            <option [value]="TaskPriority.Critical">{{ TaskPriorityLabels[TaskPriority.Critical] }}</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dueDate">Bajarish muddati</label>
+        <input
+          type="date"
+          id="dueDate"
+          formControlName="dueDate"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group" *ngIf="isEditMode">
+        <label class="checkbox-label">
+          <input
+            type="checkbox"
+            formControlName="isCompleted"
+          />
+          Vazifa bajarildi
+        </label>
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          (click)="onCancel()"
+        >
+          Bekor qilish
+        </button>
+        
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="taskForm.invalid || loading"
+        >
+          <span *ngIf="loading" class="spinner"></span>
+          {{ loading ? 'Kuting...' : submitButtonText }}
+        </button>
+      </div>
+    </form>
+
+    <!-- Loading State -->
+    <div class="loading-state" *ngIf="loading && isEditMode">
+      <div class="spinner"></div>
+      <p>Vazifa yuklanmoqda...</p>
+    </div>
+  </div>
+</div>
