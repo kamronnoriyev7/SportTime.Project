@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:ToDoListApp.ViewModels"
+             x:Class="ToDoListApp.Views.AddTaskPage"
+             x:DataType="viewModels:TaskViewModel"
+             Title="Yangi vazifa qo'shish">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="10" Padding="20">
+            <Label Text="Sarlavha" FontSize="Small"/>
+            <Entry Text="{Binding NewTaskTitle}" Placeholder="Vazifa sarlavhasi"/>
+
+            <Label Text="Tavsif" FontSize="Small" Margin="0,10,0,0"/>
+            <Editor Text="{Binding NewTaskDescription}" Placeholder="Vazifa tavsifi" HeightRequest="100" AutoSize="Disabled"/>
+
+            <Label Text="Bajarish muddati" FontSize="Small" Margin="0,10,0,0"/>
+            <DatePicker Date="{Binding NewTaskDueDate}"/>
+
+            <Button Text="Saqlash"
+                    Command="{Binding AddTaskCommand}"
+                    Margin="0,20,0,0"
+                    CornerRadius="20"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="{StaticResource White}"/>
+            <Button Text="Bekor qilish"
+                    Clicked="OnCancelClicked"
+                    Margin="0,5,0,0"
+                    CornerRadius="20"
+                    BackgroundColor="{StaticResource Gray200}"
+                    TextColor="{StaticResource Black}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
